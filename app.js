@@ -9,6 +9,19 @@ window.addEventListener("resize", (e) => {
     //alert("Keyboard detected!!");
 });
 
+function animatToast(msg, bgColor) {
+    const toastNote = document.querySelector('.toastNotify');
+    if(toastNote.classList = "toastNotify animate")
+        toastNote.classList.remove('animate');
+    toastNote.innerHTML = msg;
+    toastNote.style.backgroundColor = bgColor;
+    toastNote.classList.add('animate');
+    setTimeout(() => {
+        toastNote.classList.remove('animate');
+    }, 2005);
+    console.log(toastNote.classList);
+}
+
 const con1 = document.getElementById("content1"),
     con2 = document.getElementById("content2"),
     con3 = document.getElementById("content3");
@@ -45,12 +58,23 @@ function swipeleft3(){
 }
 
 function putCategory(index) {
+    document.getElementById('taskSel').innerHTML = " -- Choose Task -- ";
     CategorySelected = index;
+    taskSlected="";
 }
 
 function togglePop() {
     document.querySelector('.popup').classList.toggle('active');
     document.querySelector('.ovelay2').classList.toggle('active');
+}
+
+function ChooseTask() {
+    if(CategorySelected == "")
+        animatToast("Please choose any one category", "rgb(114, 195, 233)");
+    else{
+        togglePop();
+        renderTasks();
+    }
 }
 
 function setTask(task) {
@@ -78,8 +102,10 @@ function renderTasks() {
     let temp = '';
     console.log(TasksL);
     while(TasksL[i]!=null){
-        console.log(TasksL[i]);
-        temp = temp.concat(`<li onclick="setTask(this)">${TasksL[i]}</li>`);
+        if(CategorySelected == TasksL[i].category){
+            console.log(TasksL[i]);
+            temp = temp.concat(`<li onclick="setTask(this)">${TasksL[i].task}</li>`);
+        }
         i++;
     }
     document.querySelector('.taskContainer').innerHTML = temp;
@@ -93,7 +119,10 @@ function addTask() {
     while(TasksL[i] != null){
         i++;
     }
-    TasksL[i] = task.value;
+    TasksL[i] = {
+        category: CategorySelected,
+        task: task.value
+    } 
     Struct.Tasks = TasksL;
     localStorage.setItem('Data-Storaging-Analysis', JSON.stringify(Struct));
     renderTasks();
@@ -128,13 +157,13 @@ function Submitted() {
             Struct.Records = Records;
             localStorage.setItem('Data-Storaging-Analysis', JSON.stringify(Struct));
             console.log(Math.round(total/60)+" : "+total%60);
-            alert("Item added successfuly!");
-        }
+            animatToast('Item added successfuly!', 'rgb(142, 228, 142)');
+        }//indianred rgb(142, 228, 142)
         else
-        alert("Insufficient Inputs Error!");
+            animatToast('Insufficient Inputs Error!', 'rgb(230, 154, 154)');
     }
     else
-        alert("Insufficient Inputs Error!");
+        animatToast('Insufficient Inputs Error!', 'rgb(230, 154, 154)');
     
     RenderAnalysis();
 }
@@ -142,10 +171,10 @@ function Submitted() {
 function deleteAll() {
     if(confirm("You are about to wipe out all data")){
         localStorage.removeItem('Data-Storaging-Analysis');
-        alert("All data wiped out");
+        animatToast('Deleted successfuly', 'rgb(142, 228, 142)');
     }
     else
-        alert("Deletion Aborted!");
+        animatToast('Deletion Aborted!', 'rgb(230, 154, 154)');
 }
 
 function RenderAnalysis() {
@@ -180,6 +209,5 @@ function RenderAnalysis() {
     hours[2].innerText = `${Math.round(cat3/60)} h ${cat3%60} m`;
     percent[3].innerText = `${Math.round((cat4/total)*100)} %`;
     hours[3].innerText = `${Math.round(cat4/60)} h ${cat4%60} m`;
-
 }
 RenderAnalysis();
