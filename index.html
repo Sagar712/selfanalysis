@@ -33,27 +33,37 @@
         Summary
       </div>
     </div>
+
 <!--------------------------------Content one---------------------------->
     <div class="allContent" id="allcont">
       <div id="content1">
         <div class="adjust"></div>
         <!--Clock Here-->
-        <div class="timerPar">
-          <div class="timer1">
-            <div class="label">From</div>
-            <div class="timeContain">
-              <label for="clk1"><i class="far fa-clock"></i></label>  
-              <input class="tstyl" type="time" id="clk1">
+        <div class="allClocks">
+          <div class="timerPar">
+            <div class="timer1">
+              <div class="label">From</div>
+              <div class="timeContain">
+                <input class="tstyl" type="time" id="clk1">
+              </div>
+            </div>
+            <div class="timer1">
+              <div class="label">To</div>
+              <div class="timeContain">         
+                <input class="tstyl" type="time" id="clk2">
+              </div>
             </div>
           </div>
-          <div class="timer1">
-            <div class="label">To</div>
-            <div class="timeContain">
-              <label for="clk2"><i class="far fa-clock"></i></label>              
-              <input class="tstyl" type="time" id="clk2">
-            </div>
+          <div class="aBar">
+            <div class="baraside"></div>
+            <p>OR</p>
+            <div class="baraside"></div>
+          </div>
+          <div class="ManualClock">
+            <input type="number" placeholder="eg 1.5 (in hr)" id="fillHrs">
           </div>
         </div>
+        
 
         <!--Categories Here-->
         <div class="CategoryContainer">

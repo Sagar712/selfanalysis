@@ -133,10 +133,11 @@ function addTask() {
 
 function Submitted() {
     console.log(taskSlected+" <--> "+CategorySelected);
-    let tim1="", tim2="";
+    let tim1="", tim2="", Hours="";
     let today = new Date();
     tim1 = document.querySelector('#clk1').value;
     tim2 = document.querySelector('#clk2').value;
+    Hours = document.querySelector('#fillHrs').value;
     if(tim1 != "" && taskSlected!="" && CategorySelected!=""){
         let splits = tim1.split(":");
         let total1 = parseInt(splits[0])*60 + parseInt(splits[1]);
@@ -163,6 +164,26 @@ function Submitted() {
         }//indianred rgb(142, 228, 142)
         else
             animatToast('Insufficient Inputs Error!', 'rgb(230, 154, 154)');
+    }
+    else if(Hours!=""){
+        let timeInMin = Hours*60;
+        if(timeInMin>0){
+            let Struct = JSON.parse(localStorage.getItem('Data-Storaging-Analysis'));
+            let Records = Struct.Records;
+            let i=1;
+            while(Records[i] != null){
+                i++;
+            }
+            Records[i] = {
+                task: taskSlected,
+                category: CategorySelected,
+                time: Math.round(timeInMin),
+                date: today.toDateString()
+            }
+            Struct.Records = Records;
+            localStorage.setItem('Data-Storaging-Analysis', JSON.stringify(Struct));
+            animatToast('Item added successfuly!', 'rgb(142, 228, 142)');
+        }
     }
     else
         animatToast('Insufficient Inputs Error!', 'rgb(230, 154, 154)');
@@ -203,14 +224,14 @@ function RenderAnalysis() {
     }
     let total = cat1+cat2+cat3+cat4;
     console.log(cat1+" "+cat2+" "+cat3+" "+cat4);
-    percent[0].innerText = `${Math.round((cat1/total)*100)} %`;
-    hours[0].innerText = `${Math.round(cat1/60)} h ${cat1%60} m`;
-    percent[1].innerText = `${Math.round((cat2/total)*100)} %`;
-    hours[1].innerText = `${Math.round(cat2/60)} h ${cat2%60} m`;
-    percent[2].innerText = `${Math.round((cat3/total)*100)} %`;
-    hours[2].innerText = `${Math.round(cat3/60)} h ${cat3%60} m`;
-    percent[3].innerText = `${Math.round((cat4/total)*100)} %`;
-    hours[3].innerText = `${Math.round(cat4/60)} h ${cat4%60} m`;
+    percent[0].innerText = `${Math.trunc((cat1/total)*100)} %`;
+    hours[0].innerText = `${Math.trunc(cat1/60)} h ${cat1%60} m`;
+    percent[1].innerText = `${Math.trunc((cat2/total)*100)} %`;
+    hours[1].innerText = `${Math.trunc(cat2/60)} h ${cat2%60} m`;
+    percent[2].innerText = `${Math.trunc((cat3/total)*100)} %`;
+    hours[2].innerText = `${Math.trunc(cat3/60)} h ${cat3%60} m`;
+    percent[3].innerText = `${Math.trunc((cat4/total)*100)} %`;
+    hours[3].innerText = `${Math.trunc(cat4/60)} h ${cat4%60} m`;
 
     //---------Options-------------
     const options = document.querySelector('.DateOpt');
@@ -256,16 +277,15 @@ function UpdateAnalysis() {
     }
     let total = cat1+cat2+cat3+cat4;
     console.log(cat1+" "+cat2+" "+cat3+" "+cat4);
-    percent[0].innerText = `${Math.round((cat1/total)*100)} %`;
-    hours[0].innerText = `${Math.round(cat1/60)} h ${cat1%60} m`;
-    percent[1].innerText = `${Math.round((cat2/total)*100)} %`;
-    hours[1].innerText = `${Math.round(cat2/60)} h ${cat2%60} m`;
-    percent[2].innerText = `${Math.round((cat3/total)*100)} %`;
-    hours[2].innerText = `${Math.round(cat3/60)} h ${cat3%60} m`;
-    percent[3].innerText = `${Math.round((cat4/total)*100)} %`;
-    hours[3].innerText = `${Math.round(cat4/60)} h ${cat4%60} m`;
+    percent[0].innerText = `${Math.trunc((cat1/total)*100)} %`;
+    hours[0].innerText = `${Math.trunc(cat1/60)} h ${cat1%60} m`;
+    percent[1].innerText = `${Math.trunc((cat2/total)*100)} %`;
+    hours[1].innerText = `${Math.trunc(cat2/60)} h ${cat2%60} m`;
+    percent[2].innerText = `${Math.trunc((cat3/total)*100)} %`;
+    hours[2].innerText = `${Math.trunc(cat3/60)} h ${cat3%60} m`;
+    percent[3].innerText = `${Math.trunc((cat4/total)*100)} %`;
+    hours[3].innerText = `${Math.trunc(cat4/60)} h ${cat4%60} m`;
 }
-
 //download(localStorage.getItem('Data-Storaging-Analysis'), "Testing.json", "application/json");
 
 //function for downloading localStorage stuff
