@@ -133,16 +133,20 @@ function addTask() {
 
 function Submitted() {
     console.log(taskSlected+" <--> "+CategorySelected);
-    let tim1="", tim2="", Hours="";
+    let tim1="-", tim2="-", Hours="", typ1 = "am", typ2 = "am";
     let today = new Date();
     tim1 = document.querySelector('#clk1').value;
     tim2 = document.querySelector('#clk2').value;
     Hours = document.querySelector('#fillHrs').value;
     if(tim1 != "" && taskSlected!="" && CategorySelected!=""){
-        let splits = tim1.split(":");
-        let total1 = parseInt(splits[0])*60 + parseInt(splits[1]);
-        splits = tim2.split(":");
-        let total2 = parseInt(splits[0])*60 + parseInt(splits[1]);
+        let splits1 = tim1.split(":");
+        let total1 = parseInt(splits1[0])*60 + parseInt(splits1[1]);
+        if(total1>720)
+            typ1 = "pm";
+        let splits2 = tim2.split(":");
+        let total2 = parseInt(splits2[0])*60 + parseInt(splits2[1]);
+        if(total2>720)
+            typ2 = "pm";
         let total = total2-total1;
         if(total>0){
             let Struct = JSON.parse(localStorage.getItem('Data-Storaging-Analysis'));
@@ -154,12 +158,14 @@ function Submitted() {
             Records[i] = {
                 task: taskSlected,
                 category: CategorySelected,
+                from: splits1[0]%12+":"+splits1[1]+" "+typ1,
+                to: splits2[0]%12+":"+splits2[1]+" "+typ2,
                 time: total,
                 date: today.toDateString()
             }
             Struct.Records = Records;
             localStorage.setItem('Data-Storaging-Analysis', JSON.stringify(Struct));
-            console.log(Math.round(total/60)+" : "+total%60);
+            console.log(Records);
             animatToast('Item added successfuly!', 'rgb(142, 228, 142)');
         }//indianred rgb(142, 228, 142)
         else
@@ -190,6 +196,96 @@ function Submitted() {
     
     RenderAnalysis();
 }
+
+const allBlocks = Array.from(document.querySelectorAll('.first'));
+
+function toggleAnalysis() {
+    document.querySelector('.analysisPop').classList.toggle('active');
+    document.querySelector('.ovelay3').classList.toggle('active');
+}
+
+allBlocks.forEach((block, index) => {
+    block.addEventListener('click', function(){
+        toggleAnalysis();
+        let Struct = JSON.parse(localStorage.getItem('Data-Storaging-Analysis'));
+        let Records = Struct.Records;
+        let i=1;
+        let tempStr = "";
+        let TableStr = '<table class = "AnaTb"><tr><th>Task</th> <th>From</th> <th>To</th> <th>T. Spent</th> </tr>'
+        if(index == 0){//aria-colspan="2
+            while(Records[i] != null){
+                if(Records[i].category == "Urgent & Important"){
+                    if(tempStr == ""){
+                        tempStr = Records[i].date;
+                        TableStr = TableStr.concat(`<tr> <td colspan="4" class="special">${Records[i].date}</td> </tr>`);
+                    }
+                    else if(tempStr!=Records[i].date){
+                        tempStr = Records[i].date;
+                        TableStr = TableStr.concat(`<tr> <td colspan="4" class="special">${Records[i].date}</td> </tr>`);
+                    }
+                    TableStr = TableStr.concat(`<tr> <td>${Records[i].task}</td> <td>${Records[i].from}</td> 
+                    <td>${Records[i].to}</td> <td>${Records[i].time} min</td> </tr>`);
+                }
+                i++;
+            }
+        }
+        else if(index == 1){
+            while(Records[i] != null){
+                if(Records[i].category == "Urgent & Not Important"){
+                    if(tempStr == ""){
+                        tempStr = Records[i].date;
+                        TableStr = TableStr.concat(`<tr> <td colspan="4" class="special">${Records[i].date}</td> </tr>`);
+                    }
+                    else if(tempStr!=Records[i].date){
+                        tempStr = Records[i].date;
+                        TableStr = TableStr.concat(`<tr> <td colspan="4" class="special">${Records[i].date}</td> </tr>`);
+                    }
+                    TableStr = TableStr.concat(`<tr> <td>${Records[i].task}</td> <td>${Records[i].from}</td> 
+                    <td>${Records[i].to}</td> <td>${Records[i].time} min</td> </tr>`);
+                }
+                i++;
+            }
+        }
+        else if(index == 2){
+            while(Records[i] != null){
+                if(Records[i].category == "Not Urgent & Important"){
+                    if(tempStr == ""){
+                        tempStr = Records[i].date;
+                        TableStr = TableStr.concat(`<tr> <td colspan="4" class="special">${Records[i].date}</td> </tr>`);
+                    }
+                    else if(tempStr!=Records[i].date){
+                        tempStr = Records[i].date;
+                        TableStr = TableStr.concat(`<tr> <td colspan="4" class="special">${Records[i].date}</td> </tr>`);
+                    }
+                    TableStr = TableStr.concat(`<tr> <td>${Records[i].task}</td> <td>${Records[i].from}</td> 
+                    <td>${Records[i].to}</td> <td>${Records[i].time} min</td> </tr>`);
+                }
+                i++;
+            }
+        }
+        else{
+            while(Records[i] != null){
+                if(Records[i].category == "Not Urgent & Not Important"){
+                    if(tempStr == ""){
+                        tempStr = Records[i].date;
+                        TableStr = TableStr.concat(`<tr> <td colspan="4" class="special">${Records[i].date}</td> </tr>`);
+                    }
+                    else if(tempStr!=Records[i].date){
+                        tempStr = Records[i].date;
+                        TableStr = TableStr.concat(`<tr> <td colspan="4" class="special">${Records[i].date}</td> </tr>`);
+                    }
+                    TableStr = TableStr.concat(`<tr> <td>${Records[i].task}</td> <td>${Records[i].from}</td> 
+                    <td>${Records[i].to}</td> <td>${Records[i].time} min</td> </tr>`);
+                }
+                i++;
+            }
+        }
+        TableStr = TableStr.concat('</table>');
+        document.querySelector('.analysisPop').innerHTML = TableStr;
+        
+    });
+});
+
 
 function deleteAll() {
     if(confirm("You are about to wipe out all data")){
