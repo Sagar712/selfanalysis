@@ -1,0 +1,17 @@
+{
+    "name":"Self Analysis",
+    "short_name":"Self Analysis",
+    "start_url":".",
+    "background_color":"white",
+    "theme_color":"rgb(223, 77, 58)",
+    "display":"standalone",
+    "icons":[
+        {
+            "src":"./Contents/Logo2.png",
+            "sizes":"600x600",
+            "type":"image/png"
+        }
+        
+    ]
+
+}

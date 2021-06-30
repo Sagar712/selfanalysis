@@ -9,6 +9,46 @@ body{
     overflow-x: hidden;
 }
 
+.updateAvailable{
+    position: fixed;
+    bottom: 2rem;
+    right: 0;
+    height: 3rem;
+    width: 18rem;
+    background-color: rgba(0, 0, 0, 0.753);
+    color: white;
+    font-size: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 99999;
+    transform: translateX(100%);
+    transition: all 0.2s ease;
+}
+.updateAvailable.active{
+    transform: translateX(0);
+    transition: all 0.2s ease;
+}
+.FireUpdate{
+    height: 100%;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    user-select: none;
+}
+.closebtnH{
+    font-size: 1.5rem;
+    height: 3rem;
+    width: 3.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(155, 23, 23, 0.733);
+    margin-left: 1.5rem;
+}
+
 .delte{
     margin-top: 2rem;
     width: 6rem;

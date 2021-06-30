@@ -1,3 +1,44 @@
+if ('serviceWorker' in navigator) {
+
+    navigator.serviceWorker.register('./sw.js').then(reg => {
+      reg.addEventListener('updatefound', () => {
+        // A wild service worker has appeared in reg.installing!
+        newWorker = reg.installing;
+
+        newWorker.addEventListener('statechange', () => {
+          // Has network.state changed?
+          switch (newWorker.state) {
+            case 'installed':
+              if (navigator.serviceWorker.controller) {
+                // new update available
+                showUpdateBar();
+              }
+              // No update available
+              break;
+          }
+        });
+      });
+    });
+
+    let refreshing;
+    navigator.serviceWorker.addEventListener('controllerchange', function () {
+      if (refreshing) return;
+      window.location.reload();
+      refreshing = true;
+    });
+}
+function showUpdateBar(){
+    document.querySelector('.updateAvailable').classList.add('active');
+}  
+function fireUpdate() {
+    document.querySelector('.updateAvailable').classList.remove('active');
+    newWorker.postMessage({ action: 'skipWaiting' });
+}
+document.querySelector('.closebtnH').addEventListener('click', function(){
+    document.querySelector('.updateAvailable').classList.remove('active');
+});
+
+
 const allTabs = document.querySelectorAll('.icons');
 allTabs[0].style.borderBottom = "4px solid rgb(223, 77, 58)";
 allTabs[1].style.borderBottom = "4px solid white";
